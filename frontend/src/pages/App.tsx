@@ -126,11 +126,20 @@ export function App() {
     setIncidentDescription(values.incidentDescription);
     try {
       const responseQuestions = await generateFollowups(values.incidentDescription, files);
-      setQuestions(responseQuestions);
-      setQuestionIndex(0);
-      setAnswers({});
-      setCurrentAnswer("");
-      setPhase("questions");
+      if (responseQuestions.length === 0) {
+        setQuestions([]);
+        setAnswers({});
+        // Direct transition to report analysis
+        const response = await analyzeCase(values.incidentDescription, files, {});
+        setResult(response);
+        setPhase("report");
+      } else {
+        setQuestions(responseQuestions);
+        setQuestionIndex(0);
+        setAnswers({});
+        setCurrentAnswer("");
+        setPhase("questions");
+      }
     } catch (err) {
       setError(
         extractApiError(
@@ -466,8 +475,17 @@ export function App() {
                 
                 {/* Progress Bar */}
                 <div className="rounded-xl border border-white/[0.06] bg-white/[0.03] backdrop-blur-xl p-5 shadow-lg shadow-black/10">
-                  <div className="flex items-center justify-between text-xs font-bold uppercase tracking-wider mb-3">
-                    <span className="text-slate-500">Follow-up Questionnaire</span>
+                  <div className="flex flex-wrap items-center justify-between gap-3 text-xs font-bold uppercase tracking-wider mb-3">
+                    <div className="flex items-center gap-4">
+                      <span className="text-slate-500">Follow-up Questionnaire</span>
+                      <button
+                        onClick={onSubmitReport}
+                        type="button"
+                        className="inline-flex items-center gap-1.5 rounded-lg bg-cyan-500/10 border border-cyan-500/20 px-3 py-1 text-[10px] text-cyan-300 hover:bg-cyan-500/20 active:scale-95 transition"
+                      >
+                        Skip & Generate Report
+                      </button>
+                    </div>
                     <span className="text-cyan-400">{questionsProgressPercent}% Complete ({answeredCount}/{questions.length})</span>
                   </div>
                   <div className="h-1.5 w-full overflow-hidden rounded-full bg-white/[0.05]">

@@ -125,7 +125,7 @@ class AIService:
         payload = await self._chat_completion(system_prompt, user_prompt, temperature=0.2)
         questions = payload.get("questions", [])
         clean = [str(q).strip() for q in questions if str(q).strip()]
-        return clean[:7] if clean else ["When exactly did the incident happen?"]
+        return clean[:3]
 
     async def analyze_case(
         self,
