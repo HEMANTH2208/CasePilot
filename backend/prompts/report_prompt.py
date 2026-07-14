@@ -28,5 +28,9 @@ def build_report_schema_prompt() -> str:
         "  7. PRAYER FOR RELIEF: A formal closing prayer requesting immediate investigation, registration of complaint, and recovery of damages.\n"
         "  8. SIGNATURE: Complainant signature block.\n"
         "- Do NOT make the draft short or generic. Ensure it uses rigorous legal phraseology and is completely ready to file.\n"
+        "- How to assign 'confidence' score:\n"
+        "  * Assign 'High' if the user has provided specific, actionable answers to follow-up questions AND uploaded relevant evidence documents.\n"
+        "  * Assign 'Medium' if the case is mostly clear but lacks direct supporting files, or if details are incomplete.\n"
+        "  * Assign 'Low' if descriptions are extremely vague and no supporting documentation is uploaded.\n"
         "- Do NOT invent or hallucinate facts."
     )
