@@ -279,7 +279,7 @@ export function App() {
       <div className="relative z-10 mx-auto max-w-6xl px-4 py-8">
         
         {/* ──── Navbar ──── */}
-        <header className="mb-8 flex items-center justify-between rounded-2xl border border-white/[0.06] bg-white/[0.03] backdrop-blur-2xl p-5 shadow-lg shadow-black/20">
+        <header className="relative z-50 mb-8 flex items-center justify-between rounded-2xl border border-white/[0.06] bg-white/[0.03] backdrop-blur-2xl p-5 shadow-lg shadow-black/20">
           <div className="flex items-center gap-3.5">
             <div className="flex h-11 w-11 items-center justify-center rounded-xl bg-gradient-to-br from-cyan-400 via-blue-500 to-purple-600 shadow-lg shadow-cyan-500/20">
               <Scale className="h-5.5 w-5.5 text-white" />
