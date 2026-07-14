@@ -179,13 +179,53 @@ class AIService:
                     else:
                         prov["confidence"] = "Medium"
 
-        # Normalize complaint_sections
-        if not isinstance(payload.get("complaint_sections"), list):
-            payload["complaint_sections"] = []
+        # Extract and normalize complaint_sections using aliases (handles LLM naming variations)
+        complaint_sections = None
+        for key in ["complaint_sections", "complaint_section", "complaint_sections_to_file_under", "complaints", "sections", "complaint_provisions"]:
+            if key in payload and isinstance(payload[key], list):
+                complaint_sections = payload[key]
+                break
+        
+        if complaint_sections is None:
+            for key in ["complaint_sections", "complaint_section"]:
+                if key in payload and isinstance(payload[key], dict):
+                    complaint_sections = [payload[key]]
+                    break
+        
+        normalized_sections = []
+        if isinstance(complaint_sections, list):
+            for item in complaint_sections:
+                if isinstance(item, dict):
+                    sec = ""
+                    for s_key in ["section", "section_name", "act", "statute", "law"]:
+                        if s_key in item:
+                            sec = str(item[s_key])
+                            break
+                    exp = ""
+                    for e_key in ["explanation", "brief_explanation", "guilt_explanation", "reason", "details"]:
+                        if e_key in item:
+                            exp = str(item[e_key])
+                            break
+                    if sec or exp:
+                        normalized_sections.append({"section": sec, "explanation": exp})
+        
+        payload["complaint_sections"] = normalized_sections
 
-        # Normalize written_complaint_draft
-        if not isinstance(payload.get("written_complaint_draft"), str):
-            payload["written_complaint_draft"] = str(payload.get("written_complaint_draft") or "")
+        # Extract and normalize written_complaint_draft using aliases
+        written_complaint_draft = None
+        for key in ["written_complaint_draft", "written_complaint", "complaint_draft", "complaint_content", "draft_complaint", "complaint_text", "written_complaint_content"]:
+            if key in payload and isinstance(payload[key], str):
+                written_complaint_draft = payload[key]
+                break
+        
+        if written_complaint_draft is None:
+            written_complaint_draft = ""
+            for key in ["written_complaint_draft", "complaint_draft"]:
+                if key in payload and payload[key] is not None:
+                    written_complaint_draft = str(payload[key])
+                    break
+                    
+        payload["written_complaint_draft"] = written_complaint_draft
 
         if not payload.get("disclaimer"):
             payload["disclaimer"] = (
