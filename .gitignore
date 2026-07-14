@@ -1,0 +1,36 @@
+# Dependency directories
+node_modules/
+frontend/node_modules/
+backend/.venv/
+.venv/
+venv/
+env/
+
+# Build and distribution
+dist/
+frontend/dist/
+build/
+backend/build/
+
+# Local configuration files
+.env
+backend/.env
+frontend/.env
+*.env.local
+
+# Python cache
+__pycache__/
+*.py[cod]
+*$py.class
+.pytest_cache/
+.coverage
+htmlcov/
+
+# OS metadata
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# Logs and runtime outputs
+.run-logs/
+*.log
